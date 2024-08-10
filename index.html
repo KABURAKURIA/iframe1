@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Iframe Example</title>
+    <title>Anon Studios</title>
     <style>
         body, html {
             margin: 0;
@@ -25,21 +25,30 @@
             height: 100%;
             border: none;
         }
-        @media (max-width: 768px) {
-            .iframe-container {
-                height: 80vh; /* Adjust height for smaller screens */
-            }
-        }
-        @media (max-width: 480px) {
-            .iframe-container {
-                height: 70vh; /* Further adjust height for very small screens */
-            }
-        }
     </style>
+    <script>
+        function preventRedirects() {
+            const iframe = document.getElementById('blogIframe');
+
+            // Prevent the iframe from navigating the parent page
+            iframe.addEventListener('load', function() {
+                const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+
+                // Handle all links to stay within the iframe
+                const links = iframeDocument.querySelectorAll('a');
+                links.forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        iframe.contentWindow.location.href = this.href;
+                    });
+                });
+            });
+        }
+    </script>
 </head>
-<body>
+<body onload="preventRedirects()">
     <div class="iframe-container">
-        <iframe src="https://anonstudioske.blogspot.com/"></iframe>
+        <iframe id="blogIframe" src="https://anonstudioske.blogspot.com/"></iframe>
     </div>
 </body>
 </html>
